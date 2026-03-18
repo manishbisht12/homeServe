@@ -35,7 +35,7 @@ const Navbar = () => {
         className={`
           transition-all duration-500 ease-in-out flex items-center justify-between
           ${isScrolled 
-            ? "w-[90%] md:w-[85%] mt-4 rounded-2xl bg-white/90 backdrop-blur-md shadow-lg border border-gray-100 py-3 px-8" 
+            ? "w-[90%] md:w-[85%] mt-4 rounded-2xl bg-gray-100 backdrop-blur-md shadow-lg border border-gray-100 py-3 px-8" 
             : "w-full mt-0 rounded-none bg-white border-b border-gray-200 py-4 px-10"
           }
         `}

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import ServicePage from "./pages/Service";
+import Professionals from "./pages/Professionals";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<ServicePage/>}/>
+        <Route path="/services/:serviceName" element={<Professionals />} />
       </Routes>
 
     </BrowserRouter>
