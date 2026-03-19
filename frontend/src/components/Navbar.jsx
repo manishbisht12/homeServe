@@ -25,7 +25,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Services", path: "/services" },
-    { name: "My Bookings", path: "/bookings" },
+    { name: "My Bookings", path: "/my-bookings" },
     { name: "Favorites", path: "/favorites" },
   ];
 
@@ -73,12 +73,21 @@ const Navbar = () => {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-6">
-          <button className="text-gray-700 font-bold text-sm hover:text-[#4EC9B0] transition-colors">
-            Sign In
-          </button>
-          <button className="bg-[#21a98e] text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md hover:bg-[#058f73] transform hover:scale-105 transition-all">
-            Get Started
-          </button>
+        
+<div className="flex items-center gap-6">
+  <Link 
+    to="/login" 
+    className="text-gray-700 font-bold text-sm hover:text-[#4EC9B0] transition-colors"
+  >
+    Sign In
+  </Link>
+  <Link 
+    to="/register" 
+    className="bg-[#21a98e] text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md hover:bg-[#058f73] transform hover:scale-105 transition-all underline-none"
+  >
+    Get Started
+  </Link>
+</div>
         </div>
       </nav>
     </header>
