@@ -67,7 +67,10 @@ const ServiceCard = ({ item }) => {
             View Pros
           </button>
 
-          <button className="flex-1 bg-[#4EC9B0]/10 text-[#4EC9B0] py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#4EC9B0] hover:text-white transition-all duration-300 group/btn">
+        <button 
+            onClick={() => navigate(`/book/${item.id || slug}`)} // 👈 Booking page par navigate karega
+            className="flex-1 bg-[#F0FDF4] text-[#4EC9B0] py-3.5 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#4EC9B0] hover:text-white transition-all duration-300 group/btn shadow-sm"
+          >
             Book Now
             <ArrowRight
               size={16}

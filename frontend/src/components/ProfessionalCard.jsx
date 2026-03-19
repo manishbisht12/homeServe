@@ -1,7 +1,10 @@
 import React from "react";
 import { Star, MapPin, Briefcase, Clock, CheckCircle2, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ProfessionalCard = ({ pro }) => {
+
+    const navigate = useNavigate();
   return (
     <div className="group bg-white rounded-[2.5rem] border border-gray-100 p-6 md:p-8 shadow-sm hover:shadow-xl hover:border-[#4EC9B0]/20 transition-all duration-500 flex flex-col h-full">
       
@@ -78,13 +81,22 @@ const ProfessionalCard = ({ pro }) => {
 
       {/* Action Buttons - Matching ServiceCard */}
       <div className="flex gap-3 mt-auto">
-        <button className="flex-1 border-2 border-gray-50 py-3.5 rounded-2xl font-bold text-xs text-gray-600 hover:bg-gray-50 transition-colors">
+       <button 
+          onClick={() => navigate(`/pro/${pro.id}`)} // 👈 View Profile navigation
+          className="flex-1 border-2 border-gray-100 py-3.5 rounded-2xl font-bold text-xs text-gray-600 hover:bg-gray-50 transition-all active:scale-95"
+        >
           View Profile
         </button>
-        <button className="flex-1 bg-[#4EC9B0]/10 text-[#4EC9B0] py-3.5 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#4EC9B0] hover:text-white transition-all duration-300 group/btn shadow-sm shadow-[#4EC9B0]/10">
-          Hire Now
-          <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-        </button>
+      <button
+  onClick={() => navigate(`/book/${pro.id}`)}
+  className="flex-1 bg-[#4EC9B0]/10 text-[#4EC9B0] py-3.5 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#4EC9B0] hover:text-white transition-all duration-300 group/btn shadow-sm shadow-[#4EC9B0]/10"
+>
+  Hire Now
+  <ArrowRight
+    size={16}
+    className="group-hover/btn:translate-x-1 transition-transform"
+  />
+</button>
       </div>
 
     </div>
