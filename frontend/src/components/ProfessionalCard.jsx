@@ -66,29 +66,35 @@ const ProfessionalCard = ({ pro }) => {
         </div>
         <div className="text-center">
           <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Response</p>
-          <p className="text-sm font-bold text-gray-800">{pro.time}</p>
+          <p className="text-sm font-bold text-gray-800">{pro.time || "< 2 hours"}</p>
         </div>
       </div>
 
       {/* Tags (Skills) */}
       <div className="flex flex-wrap gap-2 mb-8">
-        {pro.tags.map((tag, idx) => (
-          <span key={idx} className="bg-gray-50 text-gray-500 px-3 py-1 rounded-full text-[10px] font-bold border border-gray-100">
-            {tag}
+        {pro.tags && pro.tags.length > 0 ? (
+          pro.tags.map((tag, idx) => (
+            <span key={idx} className="bg-gray-50 text-gray-500 px-3 py-1 rounded-full text-[10px] font-bold border border-gray-100">
+              {tag}
+            </span>
+          ))
+        ) : (
+          <span className="bg-gray-50 text-gray-400 px-3 py-1 rounded-full text-[10px] font-bold border border-gray-100">
+            Professional Services
           </span>
-        ))}
+        )}
       </div>
 
       {/* Action Buttons - Matching ServiceCard */}
       <div className="flex gap-3 mt-auto">
        <button 
-          onClick={() => navigate(`/pro/${pro.id}`)} // 👈 View Profile navigation
+          onClick={() => navigate(`/pro/${pro._id}`)} // 👈 View Profile navigation
           className="flex-1 border-2 border-gray-100 py-3.5 rounded-2xl font-bold text-xs text-gray-600 hover:bg-gray-50 transition-all active:scale-95"
         >
           View Profile
         </button>
       <button
-  onClick={() => navigate(`/book/${pro.id}`)}
+  onClick={() => navigate(`/book/${pro._id}`)}
   className="flex-1 bg-[#4EC9B0]/10 text-[#4EC9B0] py-3.5 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#4EC9B0] hover:text-white transition-all duration-300 group/btn shadow-sm shadow-[#4EC9B0]/10"
 >
   Hire Now
