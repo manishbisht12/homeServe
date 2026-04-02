@@ -3,7 +3,9 @@ import Professional from "../models/professionalModel.js";
 // ================= CREATE OR UPDATE PRO PROFILE =================
 export const updateProProfile = async (req, res) => {
   try {
-    const { name, role, price, image, desc, experience, service, time, tags } = req.body;
+    const { name, role, price, desc, experience, service, time, tags } = req.body;
+
+    const imageUrl = req.file ? req.file.path : req.body.image;
 
     
     const profile = await Professional.findOneAndUpdate(
@@ -13,7 +15,7 @@ export const updateProProfile = async (req, res) => {
         name,
         role,
         price,
-        image,
+        image : imageUrl,
         desc,
         experience,
         service: service.toLowerCase(),
