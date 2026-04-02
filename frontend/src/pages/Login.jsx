@@ -33,9 +33,14 @@ const Login = () => {
       );
 
       if (data.success) {
-        toast.success(`Welcome back! 🎉`);
+        
         localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/"); 
+       if(data.user.role === "pro") {
+        navigate("/pro-dashboard");
+       }else{
+        navigate("/");
+       }
+       toast.success(`Welcome back! 🎉`);
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Login failed!";

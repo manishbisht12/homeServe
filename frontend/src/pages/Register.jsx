@@ -18,6 +18,7 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
+    role : "",
   });
 
   // OTP State (4 Boxes as per your backend fix)
@@ -179,6 +180,27 @@ const Register = () => {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+
+                              <div className="flex gap-4 mb-4">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, role: "user" })}
+                    className={`flex-1 py-3 rounded-xl font-bold text-xs border transition-all ${
+                      formData.role === "user" ? "bg-[#4EC9B0] text-white border-[#4EC9B0]" : "bg-gray-50 text-gray-400 border-transparent"
+                    }`}
+                  >
+                    I'm a Customer
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, role: "pro" })}
+                    className={`flex-1 py-3 rounded-xl font-bold text-xs border transition-all ${
+                      formData.role === "pro" ? "bg-[#4EC9B0] text-white border-[#4EC9B0]" : "bg-gray-50 text-gray-400 border-transparent"
+                    }`}
+                  >
+                    I'm a Professional
+                  </button>
+                </div>
 
               <button
                 disabled={loading}

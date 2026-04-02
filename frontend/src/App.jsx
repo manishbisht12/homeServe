@@ -9,6 +9,8 @@ import Favorites from "./pages/Favorites";
 import MyBookings from "./pages/MyBookings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ProDashboard from "./pages/ProDashboard";
+
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +24,7 @@ function App() {
         <Route path="/services/:serviceName" element={<Professionals />} />
         <Route path="/book/:id" element={<Booking />} />
         <Route path="/pro/:id" element={<ProDetails />} />
+        <Route path="/pro-dashboard" element={<ProDashboard />} />
         <Route path="/favorites" element={<Favorites />} />
       </Routes>
 

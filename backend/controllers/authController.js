@@ -5,34 +5,33 @@ import { sendEmail } from "../config/brevoEmail.js";
 
 export const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password , role} = req.body;
 
         const userExists = await User.findOne({ email });
 
         if (userExists) {
-            // Case 1: Agar user already verified hai
+            
             if (userExists.isVerified) {
                 return res.status(400).json({ success: false, message: "User already exists and is verified." });
             } 
 
-            // Case 2: Check karein kya purana OTP abhi tak valid hai?
+           
             const currentTime = new Date();
             if (userExists.otpExpires > currentTime) {
-                // Agar expire nahi hua hai, toh error dein
+               
                 return res.status(400).json({ 
                     success: false, 
                     message: "OTP already sent. Please check your email or wait until it expires to request a new one." 
                 });
             }
             
-            // Case 3: Agar purana OTP expire ho gaya hai, toh purana record delete karein 
-            // taaki naya record ban sake
+           
             await User.deleteOne({ email });
         }
 
-        // --- Naya OTP Generate karein (sirf tab jab purana na ho ya expire ho gaya ho) ---
+        
         const otp = Math.floor(1000 + Math.random() * 9000).toString();
-        const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+        const otpExpires = new Date(Date.now() + 10 * 60 * 1000); 
 
         const emailHtml = `
         <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
@@ -67,6 +66,7 @@ export const registerUser = async (req, res) => {
             name,
             email,
             password: hashedPassword,
+            role : role || "user",
             otp,
             otpExpires,
             isVerified: false
@@ -164,7 +164,7 @@ export const loginUser = async (req, res) => {
         return res.json({
             success: true,
             message: "Login Successfully",
-            user: { _id: user._id, name: user.name, email: user.email },
+            user: { _id: user._id, name: user.name, email: user.email, role : user.role },
         });
 
     } catch (error) {
