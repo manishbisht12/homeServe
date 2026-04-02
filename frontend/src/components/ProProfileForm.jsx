@@ -75,8 +75,8 @@ const ProProfileForm = () => {
             <option value="electrical">Electrical</option>
             <option value="cleaning">Cleaning</option>
             <option value="painting">Painting</option> 
-            <option value="carpentry">Carpentry</option> 
-            <option value="repair">General Repair</option>
+            <option value="carpentry">Carpentry</option> {/* Fixed value */}
+            <option value="repair">Repair</option>
           </select>
         </div>
       </div>

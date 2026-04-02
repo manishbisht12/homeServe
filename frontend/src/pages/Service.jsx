@@ -7,10 +7,10 @@ import { Search, SlidersHorizontal } from "lucide-react";
 const services = [
   { id: 1, title: "Plumbing", desc: "Expert plumbing services for repairs, installations, and maintenance", price: "$80-150", rating: "4.8", reviews: "234", pros: "2 pros", img: "https://images.unsplash.com/photo-1581578731548-c64695cc6952" },
   { id: 2, title: "Electrical", desc: "Licensed electricians for all your electrical needs and safety", price: "$90-180", rating: "4.9", reviews: "189", pros: "2 pros", img: "https://images.unsplash.com/photo-1621905251918-48416bd8575a" },
-  { id: 3, title: "House Cleaning", desc: "Professional cleaning services for homes and offices", price: "$60-120", rating: "4.7", reviews: "312", pros: "1 pros", img: "https://images.unsplash.com/photo-1581579185169-22f6f7b2b3c1" },
+  { id: 3, title: "Cleaning", desc: "Professional cleaning services for homes and offices", price: "$60-120", rating: "4.7", reviews: "312", pros: "1 pros", img: "https://images.unsplash.com/photo-1581579185169-22f6f7b2b3c1" },
   { id: 4, title: "Carpentry", desc: "Skilled carpenters for furniture repair and custom woodwork", price: "$70-140", rating: "4.6", reviews: "156", pros: "1 pros", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e" },
   { id: 5, title: "Painting", desc: "Professional painters for interior and exterior projects", price: "$100-250", rating: "4.8", reviews: "201", pros: "1 pros", img: "https://images.unsplash.com/photo-1598300053653-3b5e3f7edc2f" },
-  { id: 6, title: "HVAC Service", desc: "Heating, ventilation, and air conditioning experts", price: "$120-200", rating: "4.7", reviews: "178", pros: "1 pros", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c" },
+  { id: 6, title: "Repair", desc: "Heating, ventilation, and air conditioning experts", price: "$120-200", rating: "4.7", reviews: "178", pros: "1 pros", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c" },
 ];
 
 const ServicePage = () => {
