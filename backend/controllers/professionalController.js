@@ -3,7 +3,7 @@ import Professional from "../models/professionalModel.js";
 // ================= CREATE OR UPDATE PRO PROFILE =================
 export const updateProProfile = async (req, res) => {
   try {
-    const { name, role, price, desc, experience, service, time, tags } = req.body;
+    const { name, role, price, desc, experience, service, time, tags, availableDays } = req.body;
 
     const imageUrl = req.file ? req.file.path : req.body.image;
 
@@ -21,6 +21,7 @@ export const updateProProfile = async (req, res) => {
         service: service.toLowerCase(),
         time: time || "< 2 hours",
         tags: tags || [],
+        availableDays: availableDays || []
       },
       { new: true, upsert: true } 
     );
@@ -30,6 +31,19 @@ export const updateProProfile = async (req, res) => {
       message: "Profile updated successfully",
       profile,
     });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// ================ GET PRO BY ID =================
+export const getProfessionalById = async (req, res) => {
+  try {
+    const pro = await Professional.findById(req.params.id);
+    if (!pro) {
+      return res.status(404).json({ success: false, message: "Professional not found" });
+    }
+    res.json(pro);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

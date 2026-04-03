@@ -21,6 +21,10 @@ const proSchema = new mongoose.Schema(
     jobs: { type: String, default: "0" },
     time: { type: String, default: "< 2 hours" },
     tags: { type: [String], default: [] },
+    availableDays : {
+      type : [String],
+      default: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    },
   },
   { timestamps: true }
 );
