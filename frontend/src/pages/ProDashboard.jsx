@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import ProProfileForm from "../components/ProProfileForm"; // Import the form component
 import { User, Briefcase, IndianRupee, Clock } from "lucide-react";
 
 const ProDashboard = () => {
+  const navigate = useNavigate();
+  const user = JSON.parse(sessionStorage.getItem("user"));
+
+  useEffect(() => {
+    if (!user || user.role !== "pro") {
+      navigate("/");
+    }
+  }, [navigate, user]);
+
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
       <Navbar />

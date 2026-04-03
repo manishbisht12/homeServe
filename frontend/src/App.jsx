@@ -10,6 +10,7 @@ import MyBookings from "./pages/MyBookings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProDashboard from "./pages/ProDashboard";
+import ServiceRequests from "./pages/ServiceRequests";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/book/:id" element={<Booking />} />
         <Route path="/pro/:id" element={<ProDetails />} />
         <Route path="/pro-dashboard" element={<ProDashboard />} />
+        <Route path="/pro-jobs" element={<ServiceRequests />} />
         <Route path="/favorites" element={<Favorites />} />
       </Routes>
 

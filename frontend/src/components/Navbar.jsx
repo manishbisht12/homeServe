@@ -10,8 +10,8 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Local storage se user data nikalna
-  const user = JSON.parse(localStorage.getItem("user"));
+  // Tab session ke liye user data nikalna (close pe clear ho jaye)
+  const user = JSON.parse(sessionStorage.getItem("user"));
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -31,7 +31,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
     setIsDropdownOpen(false);
     navigate("/login");
   };

@@ -34,7 +34,7 @@ const Login = () => {
 
       if (data.success) {
         
-        localStorage.setItem("user", JSON.stringify(data.user));
+        sessionStorage.setItem("user", JSON.stringify(data.user));
        if(data.user.role === "pro") {
         navigate("/pro-dashboard");
        }else{

@@ -152,13 +152,13 @@ export const loginUser = async (req, res) => {
             return res.status(403).json({ message: "Please verify your email first" });
         }
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
         res.cookie("token", token, {
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+          
         });
 
         return res.json({
