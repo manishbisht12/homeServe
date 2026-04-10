@@ -97,7 +97,7 @@ const ServicePage = () => {
                 key={item.id}
                 item={{
                   ...item,
-                  pros: proCounts[item.title] !== undefined ? `${proCounts[item.title]} pros` : item.pros,
+                  pros: proCounts[item.title] !== undefined ? `${proCounts[item.title]} ${proCounts[item.title] === 1 ? "pro" : "pros"}` : item.pros,
                 }}
               />
             ))}
