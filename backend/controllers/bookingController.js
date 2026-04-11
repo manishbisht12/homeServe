@@ -14,14 +14,6 @@ export const createBooking = async (req, res) => {
       professional,
     } = req.body;
 
-    
-    if (!name || !phone || !email || !address || !date || !time) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
-    }
-
     const booking = await Booking.create({
       name,
       phone,

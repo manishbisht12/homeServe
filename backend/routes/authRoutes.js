@@ -5,13 +5,14 @@ import {
     verifyOTP, 
     resendOTP 
 } from "../controllers/authController.js";
+import { validateRegister, validateLogin } from "../middlewares/authValidator.js";
 
 const router = express.Router();
 
 
-router.post("/register", registerUser);
+router.post("/register", validateRegister, registerUser);
 router.post("/verify-otp", verifyOTP);
 router.post("/resend-otp", resendOTP);
-router.post("/login", loginUser);
+router.post("/login", validateLogin, loginUser);
 
 export default router;
