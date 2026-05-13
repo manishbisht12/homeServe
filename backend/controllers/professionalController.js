@@ -13,7 +13,7 @@ export const updateProProfile = async (req, res) => {
       {
         user: req.user._id,
         name,
-        role,
+        role: role || service,
         price,
         image : imageUrl,
         desc,

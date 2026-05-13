@@ -3,7 +3,7 @@ import Joi from "joi";
 export const validateProfessionalProfile = (req, res, next) => {
   const schema = Joi.object({
     name: Joi.string().min(3).required(),
-    role: Joi.string().required(),
+    role: Joi.string().optional().allow(""),
     price: Joi.number().min(0).required(),
     desc: Joi.string().min(10).required(),
     experience: Joi.string().required(),
@@ -11,8 +11,8 @@ export const validateProfessionalProfile = (req, res, next) => {
     time: Joi.string().optional(),
     tags: Joi.array().items(Joi.string()).optional(),
     availableDays: Joi.array().items(Joi.string()).optional(),
-    image: Joi.string().optional(), // In case it's passed as a URL string instead of a file
-  });
+    image: Joi.string().optional(),
+  }).unknown();
 
   const { error } = schema.validate(req.body, { abortEarly: false });
 

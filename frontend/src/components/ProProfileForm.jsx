@@ -64,7 +64,7 @@ const ProProfileForm = () => {
     Object.keys(formData).forEach(key => {
       if (key === 'availableDays') {
         // Array ko handle karne ke liye individual append ya stringify
-        formData.availableDays.forEach(day => data.append("availableDays[]", day));
+        formData.availableDays.forEach(day => data.append("availableDays", day));
       } else {
         data.append(key, formData[key]);
       }
@@ -82,7 +82,8 @@ const ProProfileForm = () => {
         toast.success("Profile Updated Successfully!");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Update Failed");
+      const errorMsg = error.response?.data?.errors?.[0] || error.response?.data?.message || "Update Failed";
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
