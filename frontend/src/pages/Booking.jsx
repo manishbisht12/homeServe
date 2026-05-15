@@ -26,34 +26,36 @@ const Booking = () => {
     notes: "ss" // As per your screenshot
   });
 
+  const servicesList = [
+    { id: "1", title: "Plumbing", Image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952" },
+    { id: "2", title: "Electrical", Image: "https://images.unsplash.com/photo-1621905251918-48416bd8575a" },
+    { id: "3", title: "Cleaning", Image: "https://images.unsplash.com/photo-1581579185169-22f6f7b2b3c1" },
+    { id: "4", title: "Carpentry", Image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e" },
+    { id: "5", title: "Painting", Image: "https://images.unsplash.com/photo-1598300053653-3b5e3f7edc2f" },
+    { id: "6", title: "Repair", Image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c" },
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // Step 1: Try fetching as Professional first (most likely case from ProfessionalCard)
-        const pDetailRes = await fetch(`http://localhost:5000/api/professionals/detail/${id}`);
-        const pDetailData = await pDetailRes.json();
-
         let targetServiceTitle = "";
         let preSelectedPro = "";
 
+        // Step 1: Try fetching as Professional first
+        const pDetailRes = await fetch(`http://localhost:5000/api/professionals/detail/${id}`);
+        const pDetailData = await pDetailRes.json();
+
         if (pDetailData && pDetailData._id) {
-          // It's a professional ID
           preSelectedPro = pDetailData.name;
           targetServiceTitle = pDetailData.service;
-          
-          setFormData(prev => ({ 
-            ...prev, 
-            professional: preSelectedPro,
-            service: targetServiceTitle.charAt(0).toUpperCase() + targetServiceTitle.slice(1)
-          }));
           
           setService({
             title: targetServiceTitle.charAt(0).toUpperCase() + targetServiceTitle.slice(1),
             Image: pDetailData.image,
-            rating: pDetailData.rating,
-            reviews: pDetailData.reviews,
-            price: pDetailData.price
+            rating: pDetailData.rating || "4.8",
+            reviews: pDetailData.reviews || "234",
+            price: pDetailData.price || "80 - 150"
           });
         } else {
           // Step 2: Try fetching as Service (fallback)
@@ -63,13 +65,26 @@ const Booking = () => {
           if (sData && sData._id) {
             setService(sData);
             targetServiceTitle = sData.title;
-            setFormData(prev => ({ ...prev, service: targetServiceTitle }));
           } else {
-            targetServiceTitle = "plumbing";
+            // Step 3: Handle numeric IDs from PopularServices.jsx
+            const fallbackService = servicesList.find(s => s.id === id || s.title.toLowerCase() === id.toLowerCase());
+            if (fallbackService) {
+              setService(fallbackService);
+              targetServiceTitle = fallbackService.title;
+            } else {
+              targetServiceTitle = "Repair"; // Default to Repair instead of Plumbing to match UI
+            }
           }
         }
 
-        // Step 3: Fetch all Professionals for this service category
+        // Update form data with resolved service
+        setFormData(prev => ({ 
+          ...prev, 
+          professional: preSelectedPro,
+          service: targetServiceTitle.charAt(0).toUpperCase() + targetServiceTitle.slice(1)
+        }));
+
+        // Step 4: Fetch Professionals for this service
         if (targetServiceTitle) {
           const serviceQuery = targetServiceTitle.toLowerCase().replace(/\s+/g, "-");
           const pRes = await fetch(`http://localhost:5000/api/professionals/${serviceQuery}`);
@@ -77,9 +92,7 @@ const Booking = () => {
           
           setProfessionals(pListData);
           
-          // Determine which professional to select
           if (pListData.length > 0) {
-            // Use preSelectedPro if it exists in the list, otherwise use the first one
             const finalPro = preSelectedPro || pListData[0].name;
             setFormData(prev => ({ ...prev, professional: finalPro }));
           }
@@ -87,7 +100,6 @@ const Booking = () => {
 
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("Error loading booking details");
       } finally {
         setLoading(false);
       }
