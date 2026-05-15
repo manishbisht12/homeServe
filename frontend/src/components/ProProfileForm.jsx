@@ -14,6 +14,7 @@ const ProProfileForm = () => {
     service: "plumbing",
     experience: "",
     desc: "",
+    tags: [],
     availableDays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], 
   });
 
@@ -25,12 +26,20 @@ const ProProfileForm = () => {
     const fetchProfile = async () => {
       try {
         const { data } = await axios.get("http://localhost:5000/api/professionals/my-profile", { withCredentials: true });
-        if (data.profile) {
-          setFormData(data.profile);
-          setPreview(data.profile.image); 
+        if (data.success && data.profile) {
+          // Merge with existing state to keep default values if some fields are missing in DB
+          setFormData(prev => ({
+            ...prev,
+            ...data.profile,
+            // Ensure service is set even if it's stored differently
+            service: data.profile.service || prev.service
+          }));
+          if (data.profile.image) {
+            setPreview(data.profile.image); 
+          }
         }
       } catch (err) {
-        console.log("No existing profile found");
+        console.error("Error fetching profile:", err);
       }
     };
     fetchProfile();
@@ -62,9 +71,11 @@ const ProProfileForm = () => {
     const data = new FormData();
     // Saari fields append karein
     Object.keys(formData).forEach(key => {
-      if (key === 'availableDays') {
-        // Array ko handle karne ke liye individual append ya stringify
-        formData.availableDays.forEach(day => data.append("availableDays", day));
+      if (key === 'availableDays' || key === 'tags') {
+        // Array ko handle karne ke liye individual append
+        if (Array.isArray(formData[key])) {
+          formData[key].forEach(val => data.append(key, val));
+        }
       } else {
         data.append(key, formData[key]);
       }

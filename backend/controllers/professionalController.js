@@ -8,6 +8,15 @@ export const updateProProfile = async (req, res) => {
     const imageUrl = req.file ? req.file.path : req.body.image;
 
     
+    // Handle arrays if they come as single strings from FormData
+    const formattedAvailableDays = Array.isArray(availableDays) 
+      ? availableDays 
+      : availableDays ? [availableDays] : [];
+    
+    const formattedTags = Array.isArray(tags) 
+      ? tags 
+      : tags ? [tags] : [];
+
     const profile = await Professional.findOneAndUpdate(
       { user: req.user._id }, 
       {
@@ -20,8 +29,8 @@ export const updateProProfile = async (req, res) => {
         experience,
         service: service.toLowerCase(),
         time: time || "< 2 hours",
-        tags: tags || [],
-        availableDays: availableDays || []
+        tags: formattedTags,
+        availableDays: formattedAvailableDays
       },
       { new: true, upsert: true } 
     );
@@ -31,6 +40,19 @@ export const updateProProfile = async (req, res) => {
       message: "Profile updated successfully",
       profile,
     });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// ================ GET LOGGED-IN PRO PROFILE =================
+export const getProProfile = async (req, res) => {
+  try {
+    const profile = await Professional.findOne({ user: req.user._id });
+    if (!profile) {
+      return res.status(200).json({ success: true, profile: null });
+    }
+    res.status(200).json({ success: true, profile });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
