@@ -9,6 +9,8 @@ const bookingSchema = new mongoose.Schema(
     date: String,
     time: String,
     professional: String,
+    service: String,
+    notes: String,
 
     // optional (future use)
     status: {

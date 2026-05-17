@@ -156,14 +156,14 @@ export const loginUser = async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
-          
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
         });
 
         return res.json({
             success: true,
             message: "Login Successfully",
+            token,
             user: { _id: user._id, name: user.name, email: user.email, role : user.role },
         });
 

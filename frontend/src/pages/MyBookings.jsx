@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { 
   Mail, Phone, Calendar, Clock, MapPin, 
   MessageSquare, RotateCcw, Trash2, User, 
-  X, CheckCircle2 
+  X, CheckCircle2, Loader2
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
   
   // Reschedule States
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,21 +18,52 @@ const MyBookings = () => {
   const [newSchedule, setNewSchedule] = useState({ date: "", time: "" });
 
   // Load Data
+  const fetchBookings = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("http://localhost:5000/api/bookings/my", {
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (response.ok && data.bookings) {
+        setBookings(data.bookings);
+      } else {
+        toast.error(data.message || "Failed to load bookings");
+      }
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+      toast.error("Failed to load bookings from database");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("myBookings")) || [];
-    setBookings(saved);
+    fetchBookings();
   }, []);
 
   // Cancel Booking Logic
-  const handleCancel = (id) => {
+  const handleCancel = async (id) => {
     if (window.confirm("Are you sure you want to cancel this booking?")) {
-      const updated = bookings.filter(b => b.id !== id);
-      setBookings(updated);
-      localStorage.setItem("myBookings", JSON.stringify(updated));
-      toast.error("Booking Cancelled", {
-        icon: '🗑️',
-        style: { borderRadius: '12px', background: '#333', color: '#fff' }
-      });
+      try {
+        const response = await fetch(`http://localhost:5000/api/bookings/${id}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setBookings(prev => prev.filter(b => b._id !== id));
+          toast.success("Booking Cancelled", {
+            icon: '🗑️',
+            style: { borderRadius: '12px', background: '#333', color: '#fff' }
+          });
+        } else {
+          toast.error(data.message || "Failed to cancel booking");
+        }
+      } catch (error) {
+        console.error("Error cancelling booking:", error);
+        toast.error("Error connecting to server");
+      }
     }
   };
 
@@ -42,19 +74,34 @@ const MyBookings = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveReschedule = () => {
+  const handleSaveReschedule = async () => {
     if (!newSchedule.date || !newSchedule.time) {
       return toast.error("Please select both date and time");
     }
 
-    const updatedBookings = bookings.map(b => 
-      b.id === selectedBooking.id ? { ...b, date: newSchedule.date, time: newSchedule.time } : b
-    );
-    
-    setBookings(updatedBookings);
-    localStorage.setItem("myBookings", JSON.stringify(updatedBookings));
-    setIsModalOpen(false);
-    toast.success("Schedule Updated Successfully! 🕒");
+    try {
+      const response = await fetch(`http://localhost:5000/api/bookings/${selectedBooking._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newSchedule),
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setBookings(prev => 
+          prev.map(b => b._id === selectedBooking._id ? { ...b, date: newSchedule.date, time: newSchedule.time } : b)
+        );
+        setIsModalOpen(false);
+        toast.success("Schedule Updated Successfully! 🕒");
+      } else {
+        toast.error(data.message || "Failed to reschedule booking");
+      }
+    } catch (error) {
+      console.error("Error rescheduling booking:", error);
+      toast.error("Error connecting to server");
+    }
   };
 
   return (
@@ -68,7 +115,12 @@ const MyBookings = () => {
         </div>
 
         <div className="space-y-8">
-          {bookings.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-24 bg-white rounded-[3rem] border border-gray-100 flex flex-col items-center justify-center">
+              <Loader2 className="animate-spin text-[#4EC9B0] mb-4" size={48} />
+              <h3 className="text-xl font-bold text-gray-400">Loading your bookings...</h3>
+            </div>
+          ) : bookings.length === 0 ? (
             <div className="text-center py-24 bg-white rounded-[3rem] border-2 border-dashed border-gray-100 flex flex-col items-center">
               <div className="bg-gray-50 p-6 rounded-full mb-4">
                 <Calendar className="text-gray-300" size={48} />
@@ -78,7 +130,7 @@ const MyBookings = () => {
             </div>
           ) : (
             bookings.map((booking) => (
-              <div key={booking.id} className="bg-white p-8 md:p-10 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-200/40 hover:shadow-2xl hover:shadow-gray-200/60 transition-all duration-300 group">
+              <div key={booking._id} className="bg-white p-8 md:p-10 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-200/40 hover:shadow-2xl hover:shadow-gray-200/60 transition-all duration-300 group">
                 <div className="flex flex-col lg:flex-row gap-10">
                   
                   {/* LEFT: Info Section */}
@@ -132,7 +184,7 @@ const MyBookings = () => {
                       <RotateCcw size={18} /> Reschedule
                     </button>
                     <button 
-                      onClick={() => handleCancel(booking.id)}
+                      onClick={() => handleCancel(booking._id)}
                       className="flex items-center justify-center gap-2 w-full py-4 bg-[#E11D48] rounded-2xl font-black text-sm text-white hover:bg-[#BE123C] shadow-lg shadow-red-100 transition-all active:scale-95 mt-2"
                     >
                       <Trash2 size={18} /> Cancel

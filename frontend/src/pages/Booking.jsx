@@ -111,27 +111,40 @@ const Booking = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+ 
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Get existing bookings
-    const existing = JSON.parse(localStorage.getItem("myBookings")) || [];
-    
-    // Create new booking object matching your screenshot UI
-    const newBooking = {
-      id: Date.now(),
-      status: "confirmed",
-      ...formData
-    };
 
-    localStorage.setItem("myBookings", JSON.stringify([newBooking, ...existing]));
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/bookings",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(formData),
+        }
+      );
 
-    toast.success("Booking Confirmed!", {
-      style: { borderRadius: '15px', background: '#333', color: '#fff' }
-    });
+      const data = await response.json();
 
-    setTimeout(() => navigate("/my-bookings"), 1500);
+      if (!response.ok) {
+        const errorMsg = data.errors ? data.errors.join(", ") : (data.message || "Booking failed");
+        throw new Error(errorMsg);
+      }
+
+      toast.success("Booking Confirmed!");
+      navigate("/my-bookings");
+
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }
   };
+
 
   return (
     <div className="bg-[#F9FAFB] min-h-screen antialiased">

@@ -31,8 +31,9 @@ export const validateBooking = (req, res, next) => {
     }),
     professional: Joi.string().optional(),
     status: Joi.string().valid("confirmed", "pending", "cancelled").optional(),
-    
-  });
+    service: Joi.string().optional(),
+    notes: Joi.string().allow("").optional(),
+  }).unknown(true);
 
   const { error } = schema.validate(req.body, { abortEarly: false });
 
